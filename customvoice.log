@@ -1,0 +1,37 @@
+2024-06-20 19:16:51,783 - werkzeug - WARNING -  * Debugger is active!
+2024-06-20 19:16:51,783 - werkzeug - INFO -  * Debugger PIN: 343-696-257
+2024-06-20 19:17:03,046 - root - DEBUG - Project.create project_id = personal-voice-project-1
+2024-06-20 19:17:03,054 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): eastus.api.cognitive.microsoft.com:443
+2024-06-20 19:17:14,426 - urllib3.connectionpool - DEBUG - https://eastus.api.cognitive.microsoft.com:443 "PUT /customvoice/projects/personal-voice-project-1?api-version=2024-02-01-preview HTTP/1.1" 201 None
+2024-06-20 19:17:14,426 - root - DEBUG - Consent.create consent_id = personal-voice-consent-1
+2024-06-20 19:17:14,426 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): eastus.api.cognitive.microsoft.com:443
+2024-06-20 19:17:17,093 - urllib3.connectionpool - DEBUG - https://eastus.api.cognitive.microsoft.com:443 "POST /customvoice/consents/personal-voice-consent-1?api-version=2024-02-01-preview HTTP/1.1" 201 None
+2024-06-20 19:17:18,105 - root - DEBUG - Consent.get consent_id = personal-voice-consent-1
+2024-06-20 19:17:18,105 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): eastus.api.cognitive.microsoft.com:443
+2024-06-20 19:17:21,723 - urllib3.connectionpool - DEBUG - https://eastus.api.cognitive.microsoft.com:443 "GET /customvoice/consents/personal-voice-consent-1?api-version=2024-02-01-preview HTTP/1.1" 200 None
+2024-06-20 19:17:21,723 - root - DEBUG - Consent.create succeeded consent_id = personal-voice-consent-1
+2024-06-20 19:17:21,723 - root - DEBUG - PersonalVoice.create personal_voice_id = personal-voice-1
+2024-06-20 19:17:21,731 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): eastus.api.cognitive.microsoft.com:443
+2024-06-20 19:17:25,267 - urllib3.connectionpool - DEBUG - https://eastus.api.cognitive.microsoft.com:443 "POST /customvoice/personalvoices/personal-voice-1?api-version=2024-02-01-preview HTTP/1.1" 201 None
+2024-06-20 19:17:26,278 - root - DEBUG - PersonalVoice.get personal_voice_id = personal-voice-1
+2024-06-20 19:17:26,278 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): eastus.api.cognitive.microsoft.com:443
+2024-06-20 19:17:29,599 - urllib3.connectionpool - DEBUG - https://eastus.api.cognitive.microsoft.com:443 "GET /customvoice/personalvoices/personal-voice-1?api-version=2024-02-01-preview HTTP/1.1" 200 None
+2024-06-20 19:17:30,603 - root - DEBUG - PersonalVoice.get personal_voice_id = personal-voice-1
+2024-06-20 19:17:30,603 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): eastus.api.cognitive.microsoft.com:443
+2024-06-20 19:17:31,598 - urllib3.connectionpool - DEBUG - https://eastus.api.cognitive.microsoft.com:443 "GET /customvoice/personalvoices/personal-voice-1?api-version=2024-02-01-preview HTTP/1.1" 200 None
+2024-06-20 19:17:32,612 - root - DEBUG - PersonalVoice.get personal_voice_id = personal-voice-1
+2024-06-20 19:17:32,612 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): eastus.api.cognitive.microsoft.com:443
+2024-06-20 19:17:33,648 - urllib3.connectionpool - DEBUG - https://eastus.api.cognitive.microsoft.com:443 "GET /customvoice/personalvoices/personal-voice-1?api-version=2024-02-01-preview HTTP/1.1" 200 None
+2024-06-20 19:17:33,648 - root - DEBUG - PersonalVoice.create succeeded personal_voice_id = personal-voice-1
+2024-06-20 19:17:33,648 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.cognitive.microsofttranslator.com:443
+2024-06-20 19:17:33,918 - urllib3.connectionpool - DEBUG - https://api.cognitive.microsofttranslator.com:443 "POST /translate?api-version=3.0&to=te-IN HTTP/1.1" 200 None
+2024-06-20 19:17:38,473 - root - DEBUG - PersonalVoice.delete personal_voice_id = personal-voice-1
+2024-06-20 19:17:38,475 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): eastus.api.cognitive.microsoft.com:443
+2024-06-20 19:17:39,525 - urllib3.connectionpool - DEBUG - https://eastus.api.cognitive.microsoft.com:443 "DELETE /customvoice/personalvoices/personal-voice-1?api-version=2024-02-01-preview HTTP/1.1" 204 0
+2024-06-20 19:17:39,525 - root - DEBUG - Consent.delete consent_id = personal-voice-consent-1
+2024-06-20 19:17:39,525 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): eastus.api.cognitive.microsoft.com:443
+2024-06-20 19:17:40,506 - urllib3.connectionpool - DEBUG - https://eastus.api.cognitive.microsoft.com:443 "DELETE /customvoice/consents/personal-voice-consent-1?api-version=2024-02-01-preview HTTP/1.1" 204 0
+2024-06-20 19:17:40,506 - root - DEBUG - Project.delete project_id = personal-voice-project-1
+2024-06-20 19:17:40,506 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): eastus.api.cognitive.microsoft.com:443
+2024-06-20 19:17:41,670 - urllib3.connectionpool - DEBUG - https://eastus.api.cognitive.microsoft.com:443 "DELETE /customvoice/projects/personal-voice-project-1?api-version=2024-02-01-preview HTTP/1.1" 204 0
+2024-06-20 19:17:41,670 - werkzeug - INFO - 127.0.0.1 - - [20/Jun/2024 19:17:41] "POST /process HTTP/1.1" 200 -

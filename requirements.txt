@@ -1,0 +1,7 @@
+Flask
+requests
+azure-cognitiveservices-speech
+Flask-Cors
+azure-storage-blob
+pydub
+Werkzeug

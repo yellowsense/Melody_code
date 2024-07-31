@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Recorder and Uploader</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0; /* Light gray background */
+            background-image: url('https://www.google.com/imgres?q=background%20images%20for%20the%20melody&imgurl=https%3A%2F%2Fc8.alamy.com%2Fcomp%2FE6AEFA%2Fpurple-music-background-meaning-melody-and-tune-E6AEFA.jpg&imgrefurl=https%3A%2F%2Fwww.alamy.com%2Fstock-photo-purple-music-background-meaning-melody-and-tune-72760334.html&docid=zxXLalvCU_INTM&tbnid=xpWJgDc0yQSwJM&vet=12ahUKEwj5_JrhleyGAxWHT2wGHSsHBPAQM3oECGcQAA..i&w=1300&h=1065&hcb=2&ved=2ahUKEwj5_JrhleyGAxWHT2wGHSsHBPAQM3oECGcQAA'); /* Replace with your background image URL */
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #fff; /* White background */
+            padding: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-radius: 10px;
+        }
+        h1, h2 {
+            color: #333; /* Dark gray headings */
+        }
+        p {
+            margin-bottom: 20px;
+            color: #666; /* Medium gray text */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #4CAF50; /* Green button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+        .status {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #4CAF50; /* Green status text */
+        }
+        .error {
+            color: red; /* Red error messages */
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Voice Talent Agreement</h1>
+        <p>I, [voice talent name], am aware that recordings of my voice will be used by [company name] to create and use a synthetic version of my voice.</p>
+        
+        <h2>Audio Recorder and Uploader</h2>
+        
+        <input type="text" id="username" placeholder="Enter your username">
+        
+        <h3>Record and Upload Context</h3>
+        <button id="recordContext">Start Recording Context</button>
+        <button id="stopContext" disabled>Stop Recording Context</button>
+        <div class="status" id="contextStatus"></div>
+        
+        <h3>Record and Upload Sample Voice</h3>
+        <button id="recordSample">Start Recording Sample Voice</button>
+        <button id="stopSample" disabled>Stop Recording Sample Voice</button>
+        <div class="status" id="sampleStatus"></div>
+    </div>
+
+    <script>
+        let contextRecorder, sampleRecorder;
+        let contextChunks = [], sampleChunks = [];
+        let contextBlob, sampleBlob;
+
+        const recordContextButton = document.getElementById('recordContext');
+        const stopContextButton = document.getElementById('stopContext');
+        const contextStatusDiv = document.getElementById('contextStatus');
+        
+        const recordSampleButton = document.getElementById('recordSample');
+        const stopSampleButton = document.getElementById('stopSample');
+        const sampleStatusDiv = document.getElementById('sampleStatus');
+        const usernameInput = document.getElementById('username');
+
+        recordContextButton.addEventListener('click', async () => {
+            contextChunks = [];
+            contextStatusDiv.textContent = 'Recording context...';
+            recordContextButton.disabled = true;
+            stopContextButton.disabled = false;
+
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            contextRecorder = new MediaRecorder(stream);
+
+            contextRecorder.ondataavailable = (event) => {
+                contextChunks.push(event.data);
+            };
+
+            contextRecorder.onstop = async () => {
+                contextBlob = new Blob(contextChunks, { type: 'audio/wav' });
+                contextStatusDiv.textContent = 'Recording stopped. Uploading...';
+
+                const username = usernameInput.value.trim();
+                if (!username) {
+                    contextStatusDiv.textContent = 'Error: Username is required.';
+                    contextStatusDiv.classList.add('error');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('context_file', contextBlob, 'context.wav');
+                formData.append('username', username);
+
+                try {
+                    const response = await fetch('/upload_context', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        contextStatusDiv.textContent = 'Context file uploaded successfully!';
+                        contextStatusDiv.classList.remove('error');
+                        
+
+                    } else {
+                        contextStatusDiv.textContent = `Error: ${result.error}`;
+                        contextStatusDiv.classList.add('error');
+                    }
+                } catch (error) {
+                    contextStatusDiv.textContent = `Error: ${error.message}`;
+                    contextStatusDiv.classList.add('error');
+                }
+            };
+
+            contextRecorder.start();
+        });
+
+        stopContextButton.addEventListener('click', () => {
+            contextRecorder.stop();
+            recordContextButton.disabled = false;
+            stopContextButton.disabled = true;
+        });
+
+        recordSampleButton.addEventListener('click', async () => {
+            sampleChunks = [];
+            sampleStatusDiv.textContent = 'Recording sample voice...';
+            recordSampleButton.disabled = true;
+            stopSampleButton.disabled = false;
+
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            sampleRecorder = new MediaRecorder(stream);
+
+            sampleRecorder.ondataavailable = (event) => {
+                sampleChunks.push(event.data);
+            };
+
+            sampleRecorder.onstop = async () => {
+                sampleBlob = new Blob(sampleChunks, { type: 'audio/wav' });
+                sampleStatusDiv.textContent = 'Recording stopped. Uploading...';
+
+                const username = usernameInput.value.trim();
+                if (!username) {
+                    sampleStatusDiv.textContent = 'Error: Username is required.';
+                    sampleStatusDiv.classList.add('error');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('sample_voice_file', sampleBlob, 'sample_voice.wav');
+                formData.append('username', username);
+
+                try {
+                    const response = await fetch('/upload_sample_voice', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        sampleStatusDiv.textContent = 'Sample voice file uploaded successfully!';
+                        sampleStatusDiv.classList.remove('error');
+                        
+                        // Redirect to process.html after sample voice file upload
+                        redirectToProcessPage();
+                    } else {
+                        sampleStatusDiv.textContent = `Error: ${result.error}`;
+                        sampleStatusDiv.classList.add('error');
+                    }
+                } catch (error) {
+                    sampleStatusDiv.textContent = `Error: ${error.message}`;
+                    sampleStatusDiv.classList.add('error');
+                }
+            };
+
+            sampleRecorder.start();
+        });
+
+        stopSampleButton.addEventListener('click', () => {
+            sampleRecorder.stop();
+            recordSampleButton.disabled = false;
+            stopSampleButton.disabled = true;
+        });
+
+        // Function to handle redirect to process.html
+        function redirectToProcessPage() {
+            window.location.href = '/process'; // Replace with the correct URL if needed
+        }
+    </script>
+</body>
+</html>
